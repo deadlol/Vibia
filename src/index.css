@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #f4f4f4;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.font-vazirmatn {
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+/* Vertical text styling for edge buttons */
+.vertical-text-start {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.vertical-text-end {
+  writing-mode: vertical-rl;
+}
+
+/* Custom transition timing curve requested */
+.cubic-transition {
+  transition-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Custom scrollbars for modal detail views */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
