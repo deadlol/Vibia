@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { ActivePanel, ContentDictionary, Lang, Service } from '../types';
 import { ExternalLink, X, ArrowRight, ArrowLeft } from 'lucide-react';
 
@@ -21,15 +22,19 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
   const [hoveredProject, setHoveredProject] = useState<Service>(services[0]);
   const [selectedProject, setSelectedProject] = useState<Service | null>(null);
 
-  const getTransformClass = () => {
-    if (activePanel === 'works') return 'translate-x-0';
-    return isRtl ? 'translate-x-full' : '-translate-x-full';
+  const variants = {
+    hidden: { x: isRtl ? '100%' : '-100%' },
+    visible: { x: '0%' }
   };
 
   return (
-    <section
-      className={`absolute inset-0 w-full h-full flex flex-col md:flex-row z-30 transition-transform duration-700 cubic-transition bg-[#f4f4f4] ${selectedProject ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'
-        } ${getTransformClass()}`}
+    <motion.section
+      initial="hidden"
+      animate={activePanel === 'works' ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+      className={`absolute inset-0 w-full h-full flex flex-col md:flex-row z-30 bg-[#f4f4f4] ${selectedProject ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'
+        }`}
     >
       <div
         className={`w-full md:w-1/2 min-h-[50vh] md:min-h-full flex items-center justify-center relative overflow-hidden transition-colors duration-500 px-8 pb-8 pt-12 md:p-16 ${isRtl ? 'md:pr-24' : 'md:pl-24'}`}
@@ -170,6 +175,6 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
           </div>
         </div>
       )}
-    </section>
+    </motion.section>
   );
 };

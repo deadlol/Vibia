@@ -40,7 +40,7 @@ export default function App() {
         dict={dict}
       />
 
-      <HomeView dict={dict} setActivePanel={setActivePanel} />
+      <HomeView dict={dict} activePanel={activePanel} setActivePanel={setActivePanel} />
 
       <WorksPanel
         activePanel={activePanel}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { ActivePanel, ContentDictionary, Lang } from '../types';
 import { Sparkles, Layers, Award, Code, ExternalLink } from 'lucide-react';
 
@@ -17,14 +18,18 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
 }) => {
   const isRtl = lang === 'fa';
 
-  const getTransformClass = () => {
-    if (activePanel === 'about') return 'translate-x-0';
-    return isRtl ? '-translate-x-full' : 'translate-x-full';
+  const variants = {
+    hidden: { x: isRtl ? '-100%' : '100%' },
+    visible: { x: '0%' }
   };
 
   return (
-    <section
-      className={`absolute inset-0 w-full h-full flex flex-col lg:flex-row z-30 transition-transform duration-700 cubic-transition bg-[#f4f4f4] overflow-y-auto lg:overflow-hidden ${getTransformClass()}`}
+    <motion.section
+      initial="hidden"
+      animate={activePanel === 'about' ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+      className={`absolute inset-0 w-full h-full flex flex-col lg:flex-row z-30 bg-[#f4f4f4] overflow-y-auto lg:overflow-hidden`}
     >
       <div className={`w-full lg:w-1/2 min-h-[50vh] lg:min-h-full flex items-center justify-center p-8 pt-12 lg:p-16 ${isRtl ? 'lg:pr-24' : 'lg:pl-24'} bg-gray-200/50 relative overflow-hidden`}>
         <div className="relative w-full max-w-md h-full max-h-[85%] rounded-2xl overflow-hidden shadow-2xl group">
@@ -114,6 +119,6 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

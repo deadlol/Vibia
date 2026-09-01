@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { ActivePanel, ContentDictionary, Lang } from '../types';
 import { Copy, Check, Phone, Mail, ArrowUpRight } from 'lucide-react';
 
@@ -25,12 +26,19 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
     }, 2000);
   };
 
+  const variants = {
+    hidden: { y: '100%' },
+    visible: { y: '0%' }
+  };
+
   return (
-    <section
+    <motion.section
       id="contact"
-      className={`fixed bottom-0 left-0 w-full min-h-[13rem] md:min-h-[14rem] bg-white border-t border-gray-200 z-40 transition-transform duration-700 cubic-transition flex items-center px-6 md:px-16 overflow-hidden shadow-2xl ${
-        activePanel === 'contact' ? 'translate-y-0' : 'translate-y-full'
-      }`}
+      initial="hidden"
+      animate={activePanel === 'contact' ? 'visible' : 'hidden'}
+      variants={variants}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+      className={`fixed bottom-0 left-0 w-full min-h-[13rem] md:min-h-[14rem] bg-white border-t border-gray-200 z-40 flex items-center px-6 md:px-16 overflow-hidden shadow-2xl`}
     >
       <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-100/80 -z-0 select-none whitespace-nowrap pointer-events-none tracking-tighter">
         {dict.getInTouch}
@@ -89,6 +97,6 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

@@ -1,18 +1,31 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { GeometricShape } from './GeometricShape';
 import { ActivePanel, ContentDictionary } from '../types';
 
 interface HomeViewProps {
   dict: ContentDictionary;
+  activePanel: ActivePanel;
   setActivePanel: (panel: ActivePanel) => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ dict, setActivePanel }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ dict, activePanel, setActivePanel }) => {
+  const variants = {
+    active: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+    inactive: { opacity: 0.2, scale: 0.95, filter: 'blur(4px)' }
+  };
+
   return (
-    <section className="relative w-full h-screen flex items-center justify-center px-6 md:px-16 bg-[#f4f4f4] overflow-hidden z-10">
+    <motion.section
+      initial="active"
+      animate={activePanel === 'home' ? 'active' : 'inactive'}
+      variants={variants}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+      className="relative w-full h-screen flex items-center justify-center px-6 md:px-16 bg-[#f4f4f4] overflow-hidden z-10"
+    >
       <GeometricShape />
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center pointer-events-auto pb-24 md:pb-0 pt-12 md:pt-0">
+      <div className={`relative z-10 max-w-4xl mx-auto text-center pointer-events-auto pb-24 md:pb-0 pt-12 md:pt-0 ${activePanel !== 'home' ? 'pointer-events-none' : ''}`}>
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-black select-none">
           {dict.homeTitle}
         </h1>
@@ -36,6 +49,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ dict, setActivePanel }) => {
           </button>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
