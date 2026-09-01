@@ -19,7 +19,7 @@ export default function App() {
   useSEO(lang);
 
   return (
-    <div
+    <main
       dir={isRtl ? 'rtl' : 'ltr'}
       className={`relative w-screen h-screen overflow-hidden bg-[#f4f4f4] text-black select-none ${
         isRtl ? 'font-vazirmatn' : 'font-montserrat'
@@ -63,6 +63,6 @@ export default function App() {
         lang={lang}
         dict={dict}
       />
-    </div>
+    </main>
   );
 }
