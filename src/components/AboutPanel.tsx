@@ -23,7 +23,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
   };
 
   return (
-    <div
+    <section
       className={`absolute inset-0 w-full h-full flex flex-col lg:flex-row z-30 transition-transform duration-700 cubic-transition bg-[#f4f4f4] overflow-y-auto lg:overflow-hidden ${getTransformClass()}`}
     >
       <div className={`w-full lg:w-1/2 min-h-[50vh] lg:min-h-full flex items-center justify-center p-8 pt-12 lg:p-16 ${isRtl ? 'lg:pr-24' : 'lg:pl-24'} bg-gray-200/50 relative overflow-hidden`}>
@@ -31,6 +31,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
           <img
             src="https://6a8af91b97833836f656e772.imgix.net/sandbox/Gemini_Generated_Image_zdh7jmzdh7jmzdh7.jpg"
             alt="VIBIA logo"
+            loading="lazy"
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
@@ -113,6 +114,6 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
 
         </div>
       </div>
-    </div>
+    </section>
   );
 };
