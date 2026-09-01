@@ -24,7 +24,7 @@ export const content: Record<'en' | 'fa', ContentDictionary> = {
     emailLabel: "EMAIL",
     creditsLabel: "CREDITS",
     phoneValue: "+989123456789",
-    emailValue: "vibia@mmd-design.com",
+    emailValue: "vibia.studio@gmail.com",
     creditsValue: "© 2026 VIBIA STUDIO. ALL RIGHTS RESERVED.",
     copied: "COPIED",
   },
@@ -51,7 +51,7 @@ export const content: Record<'en' | 'fa', ContentDictionary> = {
     emailLabel: "ایمیل",
     creditsLabel: "شناسنامه",
     phoneValue: "+989123456789",
-    emailValue: "vibia@mmd-design.com",
+    emailValue: "vibia.studio@gmail.com",
     creditsValue: "© ۲۰۲۶ استودیو ویبیا. تمامی حقوق محفوظ است.",
     copied: "کپی شد",
   }
