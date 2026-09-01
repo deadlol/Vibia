@@ -48,42 +48,74 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
     let currentAngleX = 0;
     let currentAngleY = 0;
     let time = 0;
+    let targetMouseX = -1000;
+    let targetMouseY = -1000;
+    let currentMouseX = -1000;
+    let currentMouseY = -1000;
 
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
-      // Map mouse to a reasonable rotation target
       targetAngleY = ((e.clientX / innerWidth) - 0.5) * Math.PI;
       targetAngleX = ((e.clientY / innerHeight) - 0.5) * Math.PI;
+
+      const rect = canvas.getBoundingClientRect();
+      targetMouseX = e.clientX - rect.left;
+      targetMouseY = e.clientY - rect.top;
+    };
+
+    const handleMouseOut = () => {
+      targetMouseX = -1000;
+      targetMouseY = -1000;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseout', handleMouseOut);
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      time += 0.002;
-      // Smooth interpolation towards mouse target
-      currentAngleX += (targetAngleX - currentAngleX) * 0.05;
-      currentAngleY += (targetAngleY - currentAngleY) * 0.05;
+      time += 0.001; // Slower auto-rotation
+      currentAngleX += (targetAngleX - currentAngleX) * 0.02; // Slower mouse tracking
+      currentAngleY += (targetAngleY - currentAngleY) * 0.02;
 
-      const rotX = currentAngleX + time;
-      const rotY = currentAngleY + time * 1.3;
+      // Smooth mouse for hover repulsion
+      if (targetMouseX === -1000) {
+        currentMouseX = -1000;
+        currentMouseY = -1000;
+      } else {
+        if (currentMouseX === -1000) {
+          currentMouseX = targetMouseX;
+          currentMouseY = targetMouseY;
+        } else {
+          currentMouseX += (targetMouseX - currentMouseX) * 0.05; // Slower hover response
+          currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+        }
+      }
+
+      const rotX = currentAngleX + time * 0.8;
+      const rotY = currentAngleY + time * 1.2;
 
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
-      const size = Math.min(canvas.width, canvas.height) * 0.35;
+      const size = Math.min(canvas.width, canvas.height) * 0.38;
 
       // Project points
-      const projected = points.map(p => {
-        // Rotate around Y
-        let x1 = p.x * Math.cos(rotY) - p.z * Math.sin(rotY);
-        let z1 = p.x * Math.sin(rotY) + p.z * Math.cos(rotY);
-        // Rotate around X
-        let y2 = p.y * Math.cos(rotX) - z1 * Math.sin(rotX);
-        let z2 = p.y * Math.sin(rotX) + z1 * Math.cos(rotX);
+      const projected = points.map((p, i) => {
+        // 1. Organic Breathing (slower and more subtle pulse)
+        const breath = Math.sin(time * 2 + i * 0.3) * 0.03;
+        const r = 1 + breath;
+        const bx = p.x * r;
+        const by = p.y * r;
+        const bz = p.z * r;
 
-        // Apply perspective
-        const fov = 3;
+        // 2. Rotate around Y then X
+        let x1 = bx * Math.cos(rotY) - bz * Math.sin(rotY);
+        let z1 = bx * Math.sin(rotY) + bz * Math.cos(rotY);
+        let y2 = by * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = by * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+        // 3. Perspective projection
+        const fov = 3.5;
         const scale = fov / (fov + z2);
 
         return {
@@ -92,8 +124,36 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
           z: z2,
           origX: p.x,
           origY: p.y,
-          origZ: p.z
+          origZ: p.z,
+          screenX: 0,
+          screenY: 0,
+          hoverRatio: 0
         };
+      });
+
+      // Post-process for mouse repulsion
+      projected.forEach((p) => {
+        const screenX = cx + p.x * size;
+        const screenY = cy + p.y * size;
+
+        const dx = screenX - currentMouseX;
+        const dy = screenY - currentMouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Interactive radius of 150px
+        if (dist < 150 && currentMouseX !== -1000) {
+          const hoverRatio = 1 - (dist / 150);
+          const angle = Math.atan2(dy, dx);
+          // Push outwards up to 40px
+          const push = hoverRatio * 40;
+          p.screenX = screenX + Math.cos(angle) * push;
+          p.screenY = screenY + Math.sin(angle) * push;
+          p.hoverRatio = hoverRatio;
+        } else {
+          p.screenX = screenX;
+          p.screenY = screenY;
+          p.hoverRatio = 0;
+        }
       });
 
       const isDark = document.documentElement.classList.contains('dark');
@@ -106,27 +166,33 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
           const p1 = projected[i];
           const p2 = projected[j];
 
-          // Calculate distance using original 3D coordinates so connections don't pop in/out
-          const dist = Math.sqrt(
+          // Check distance using original stable coordinates
+          const dist3D = Math.sqrt(
             (p1.origX - p2.origX) ** 2 +
             (p1.origY - p2.origY) ** 2 +
             (p1.origZ - p2.origZ) ** 2
           );
 
-          if (dist < maxDistance) {
+          if (dist3D < maxDistance) {
             const avgZ = (p1.z + p2.z) / 2;
-            // Map Z from [-1, 1] to a depth multiplier [0, 1]
             const depth = Math.max(0, (avgZ + 1.2) / 2.4);
-            const distFactor = 1 - (dist / maxDistance);
-            const opacity = depth * distFactor * 0.4;
+            const distFactor = 1 - (dist3D / maxDistance);
+            const baseOpacity = depth * distFactor * 0.4;
+            const hoverBoost = Math.max(p1.hoverRatio, p2.hoverRatio);
 
-            if (opacity > 0.01) {
+            if (baseOpacity > 0.01 || hoverBoost > 0) {
               ctx.beginPath();
-              ctx.moveTo(cx + p1.x * size, cy + p1.y * size);
-              ctx.lineTo(cx + p2.x * size, cy + p2.y * size);
-              ctx.strokeStyle = isDark
-                ? `rgba(255, 255, 255, ${opacity})`
-                : `rgba(0, 0, 0, ${opacity})`;
+              ctx.moveTo(p1.screenX, p1.screenY);
+              ctx.lineTo(p2.screenX, p2.screenY);
+
+              if (hoverBoost > 0) {
+                const finalOpacity = Math.min(1, baseOpacity + hoverBoost * 0.8);
+                ctx.strokeStyle = `rgba(37, 99, 235, ${finalOpacity})`; // Blue accent
+              } else {
+                ctx.strokeStyle = isDark
+                  ? `rgba(255, 255, 255, ${baseOpacity})`
+                  : `rgba(0, 0, 0, ${baseOpacity})`;
+              }
               ctx.stroke();
             }
           }
@@ -136,14 +202,18 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
       // Draw nodes
       projected.forEach((p) => {
         const depth = Math.max(0, (p.z + 1.2) / 2.4);
-        const radius = 1 + depth * 2;
-        const opacity = depth * 0.8;
+        const radius = 1 + depth * 2.5 + (p.hoverRatio * 2);
+        const opacity = Math.min(1, depth * 0.8 + (p.hoverRatio * 0.5));
 
         ctx.beginPath();
-        ctx.arc(cx + p.x * size, cy + p.y * size, radius, 0, Math.PI * 2);
-        ctx.fillStyle = isDark
-          ? `rgba(255, 255, 255, ${opacity})`
-          : `rgba(0, 0, 0, ${opacity})`;
+        ctx.arc(p.screenX, p.screenY, radius, 0, Math.PI * 2);
+        if (p.hoverRatio > 0) {
+          ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
+        } else {
+          ctx.fillStyle = isDark
+            ? `rgba(255, 255, 255, ${opacity})`
+            : `rgba(0, 0, 0, ${opacity})`;
+        }
         ctx.fill();
       });
 
@@ -156,6 +226,7 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseout', handleMouseOut);
     };
   }, [theme]);
 
