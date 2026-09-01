@@ -26,7 +26,7 @@ export const EdgeNav: React.FC<EdgeNavProps> = ({
   };
 
   return (
-    <>
+    <nav aria-label="Edge Navigation">
       <div
         className={`hidden md:flex fixed top-1/2 -translate-y-1/2 z-50 transition-all duration-300 ${
           activePanel !== 'home' ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
@@ -97,6 +97,6 @@ export const EdgeNav: React.FC<EdgeNavProps> = ({
           />
         </button>
       </div>
-    </>
+    </nav>
   );
 };
