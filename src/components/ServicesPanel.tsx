@@ -40,16 +40,20 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
         className={`w-full md:w-1/2 min-h-[50vh] md:min-h-full flex items-center justify-center relative overflow-hidden transition-colors duration-500 px-8 pb-8 pt-12 md:p-16 ${isRtl ? 'md:pr-24' : 'md:pl-24'}`}
         style={{ backgroundColor: hoveredProject.bgHex }}
       >
-        <div className="relative w-full h-full max-w-lg max-h-[80%] rounded-xl overflow-hidden shadow-2xl group border border-white/10">
-          <img
-            src={hoveredProject.image}
-            alt={hoveredProject.title[lang]}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+        <div className="relative w-full h-full max-w-lg max-h-[80%] rounded-xl overflow-hidden shadow-2xl group border border-white/10 bg-black/10">
+          {services.map((service) => (
+            <img
+              key={service.id}
+              src={service.image}
+              alt={service.title[lang]}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
+                hoveredProject.id === service.id ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 z-20 pointer-events-none" />
 
-          <div className="absolute bottom-6 left-6 right-6 text-white">
+          <div className="absolute bottom-6 left-6 right-6 text-white z-30 pointer-events-none">
             <h3 className="text-xl md:text-2xl font-extrabold tracking-tight">
               {hoveredProject.title[lang]}
             </h3>
@@ -117,8 +121,14 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
 
       {/* MODAL */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-8">
-          <div className="bg-white dark:bg-zinc-900 text-black dark:text-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col animate-in fade-in zoom-in duration-300">
+        <div 
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-8 cursor-pointer"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div 
+            className="bg-white dark:bg-zinc-900 text-black dark:text-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col animate-in fade-in zoom-in duration-300 cursor-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between bg-gray-50 dark:bg-zinc-900/50">
               <div>
                 <span className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest block">
