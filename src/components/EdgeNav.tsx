@@ -41,12 +41,12 @@ export const EdgeNav: React.FC<EdgeNavProps> = ({
           }`}
           aria-label={dict.navWorks}
         >
-          <span className="vertical-text-start text-xs md:text-sm uppercase tracking-widest font-bold text-black py-2">
+          <span className="vertical-text-start text-xs md:text-sm uppercase tracking-widest font-bold text-black dark:text-white py-2">
             {activePanel === 'works' ? (isRtl ? 'خانه' : 'HOME') : dict.navWorks}
           </span>
           <span
-            className={`w-1.5 h-1.5 rounded-full bg-black transition-transform duration-300 ${
-              activePanel === 'works' ? 'scale-150 bg-blue-600' : 'scale-0 group-hover:scale-100'
+            className={`w-1.5 h-1.5 rounded-full bg-black dark:bg-white transition-transform duration-300 ${
+              activePanel === 'works' ? 'scale-150 bg-blue-600 dark:bg-blue-500' : 'scale-0 group-hover:scale-100'
             }`}
           />
         </button>
@@ -67,11 +67,11 @@ export const EdgeNav: React.FC<EdgeNavProps> = ({
           aria-label={dict.navAbout}
         >
           <span
-            className={`w-1.5 h-1.5 rounded-full bg-black transition-transform duration-300 ${
-              activePanel === 'about' ? 'scale-150 bg-blue-600' : 'scale-0 group-hover:scale-100'
+            className={`w-1.5 h-1.5 rounded-full bg-black dark:bg-white transition-transform duration-300 ${
+              activePanel === 'about' ? 'scale-150 bg-blue-600 dark:bg-blue-500' : 'scale-0 group-hover:scale-100'
             }`}
           />
-          <span className="vertical-text-end text-xs md:text-sm uppercase tracking-widest font-bold text-black py-2">
+          <span className="vertical-text-end text-xs md:text-sm uppercase tracking-widest font-bold text-black dark:text-white py-2">
             {activePanel === 'about' ? (isRtl ? 'خانه' : 'HOME') : dict.navAbout}
           </span>
         </button>
@@ -87,12 +87,12 @@ export const EdgeNav: React.FC<EdgeNavProps> = ({
           }`}
           aria-label={dict.navContact}
         >
-          <span className="text-xs md:text-sm uppercase tracking-widest font-bold text-black bg-[#f4f4f4]/80 px-2 py-1 rounded backdrop-blur-sm">
+          <span className="text-xs md:text-sm uppercase tracking-widest font-bold text-black dark:text-white bg-[#f4f4f4]/80 dark:bg-zinc-950/80 px-2 py-1 rounded backdrop-blur-sm">
             {activePanel === 'contact' ? (isRtl ? 'بازگشت' : 'BACK') : dict.navContact}
           </span>
           <span
-            className={`w-8 h-0.5 bg-black transition-all duration-300 ${
-              activePanel === 'contact' ? 'w-12 bg-blue-600' : 'w-4 group-hover:w-8'
+            className={`w-8 h-0.5 bg-black dark:bg-white transition-all duration-300 ${
+              activePanel === 'contact' ? 'w-12 bg-blue-600 dark:bg-blue-500' : 'w-4 group-hover:w-8'
             }`}
           />
         </button>

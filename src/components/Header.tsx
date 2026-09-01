@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Dribbble, Instagram, X } from 'lucide-react';
+import { Facebook, Dribbble, Instagram, X, Sun, Moon } from 'lucide-react';
 import { ActivePanel, Lang } from '../types';
 
 interface HeaderProps {
@@ -8,6 +8,8 @@ interface HeaderProps {
   lang: Lang;
   setLang: (lang: Lang) => void;
   closeText: string;
+  theme?: 'light' | 'dark';
+  toggleTheme?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +18,8 @@ export const Header: React.FC<HeaderProps> = ({
   lang,
   setLang,
   closeText,
+  theme = 'light',
+  toggleTheme,
 }) => {
   const isRtl = lang === 'fa';
 
@@ -30,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
       >
         <button
           onClick={() => setActivePanel('home')}
-          className="text-3xl md:text-4xl font-extrabold tracking-tighter text-black cursor-pointer uppercase select-none focus:outline-none"
+          className="text-3xl md:text-4xl font-extrabold tracking-tighter text-black dark:text-white cursor-pointer uppercase select-none focus:outline-none"
           aria-label="VIBIA Home"
         >
           VIBIA
@@ -45,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <button
             onClick={() => setActivePanel('home')}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-black text-white text-xs font-bold tracking-wider hover:bg-gray-800 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold tracking-wider hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors cursor-pointer"
           >
             <span>{isRtl ? 'بازگشت' : 'BACK'}</span>
           </button>
@@ -58,15 +62,25 @@ export const Header: React.FC<HeaderProps> = ({
             isRtl ? 'order-1' : 'order-2'
           }`}
         >
+          {toggleTheme && (
+            <button
+              onClick={toggleTheme}
+              className="p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors focus:outline-none"
+              aria-label="Toggle dark mode"
+            >
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          )}
+
           <button
             onClick={() => setLang(lang === 'en' ? 'fa' : 'en')}
-            className="text-sm font-bold cursor-pointer hover:opacity-60 border-b-2 border-black pb-0.5 transition-opacity focus:outline-none"
+            className="text-sm font-bold cursor-pointer hover:opacity-60 border-b-2 border-black dark:border-white pb-0.5 transition-opacity focus:outline-none"
             aria-label="Toggle language"
           >
             {lang === 'en' ? 'FA' : 'EN'}
           </button>
 
-          <nav className="flex items-center gap-3 md:gap-4 text-black" aria-label="Social Links">
+          <nav className="flex items-center gap-3 md:gap-4 text-black dark:text-white" aria-label="Social Links">
           <a
             href="https://dribbble.com"
             target="_blank"

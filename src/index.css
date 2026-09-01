@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   body {
@@ -6,6 +7,10 @@
     overflow: hidden;
     user-select: none;
     -webkit-font-smoothing: antialiased;
+  }
+  
+  .dark body {
+    background-color: #09090b;
   }
 }
 

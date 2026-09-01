@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-export const GeometricShape: React.FC = () => {
+interface GeometricShapeProps {
+  theme?: 'light' | 'dark';
+}
+
+export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -34,11 +38,8 @@ export const GeometricShape: React.FC = () => {
     ];
 
     const edges = [
-
       [0, 2], [0, 3], [0, 4], [0, 5],
-
       [1, 2], [1, 3], [1, 4], [1, 5],
-
       [2, 3], [3, 4], [4, 5], [5, 2]
     ];
 
@@ -63,10 +64,8 @@ export const GeometricShape: React.FC = () => {
       const cy = canvas.height / 2;
 
       const projected = vertices.map(([x, y, z]) => {
-
         let x1 = x * Math.cos(angleY) + z * Math.sin(angleY);
         let z1 = -x * Math.sin(angleY) + z * Math.cos(angleY);
-
         let y2 = y * Math.cos(angleX) - z1 * Math.sin(angleX);
         let z2 = y * Math.sin(angleX) + z1 * Math.cos(angleX);
 
@@ -78,7 +77,9 @@ export const GeometricShape: React.FC = () => {
         };
       });
 
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+      // Use theme colors
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)';
       ctx.lineWidth = 2.0;
 
       edges.forEach(([i, j]) => {
@@ -91,7 +92,7 @@ export const GeometricShape: React.FC = () => {
       projected.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, 3.0, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)';
         ctx.fill();
       });
 
@@ -105,7 +106,7 @@ export const GeometricShape: React.FC = () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [theme]); // re-run effect when theme changes to ensure drawing colors update immediately
 
   return (
     <canvas

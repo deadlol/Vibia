@@ -8,10 +8,12 @@ import { WorksPanel } from './components/ServicesPanel';
 import { AboutPanel } from './components/AboutPanel';
 import { ContactPanel } from './components/ContactPanel';
 import { useSEO } from './hooks/useSEO';
+import { useDarkMode } from './hooks/useDarkMode';
 
 export default function App() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('home');
   const [lang, setLang] = useState<Lang>('en');
+  const { theme, toggleTheme } = useDarkMode();
 
   const dict = content[lang];
   const isRtl = lang === 'fa';
@@ -21,7 +23,7 @@ export default function App() {
   return (
     <main
       dir={isRtl ? 'rtl' : 'ltr'}
-      className={`relative w-screen h-screen overflow-hidden bg-[#f4f4f4] text-black select-none ${
+      className={`relative w-screen h-screen overflow-hidden bg-[#f4f4f4] dark:bg-zinc-950 text-black dark:text-white select-none ${
         isRtl ? 'font-vazirmatn' : 'font-montserrat'
       }`}
     >
@@ -31,6 +33,8 @@ export default function App() {
         lang={lang}
         setLang={setLang}
         closeText={dict.close}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
       <EdgeNav
@@ -40,7 +44,7 @@ export default function App() {
         dict={dict}
       />
 
-      <HomeView dict={dict} activePanel={activePanel} setActivePanel={setActivePanel} />
+      <HomeView dict={dict} activePanel={activePanel} setActivePanel={setActivePanel} theme={theme} />
 
       <WorksPanel
         activePanel={activePanel}
