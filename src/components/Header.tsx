@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
             {lang === 'en' ? 'FA' : 'EN'}
           </button>
 
-          <div className="flex items-center gap-3 md:gap-4 text-black">
+          <nav className="flex items-center gap-3 md:gap-4 text-black" aria-label="Social Links">
           <a
             href="https://dribbble.com"
             target="_blank"
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Facebook size={20} />
           </a>
-        </div>
+        </nav>
       </div>
       )}
     </header>

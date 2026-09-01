@@ -27,7 +27,7 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
   };
 
   return (
-    <div
+    <section
       className={`absolute inset-0 w-full h-full flex flex-col md:flex-row z-30 transition-transform duration-700 cubic-transition bg-[#f4f4f4] ${selectedProject ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'
         } ${getTransformClass()}`}
     >
@@ -39,6 +39,7 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
           <img
             src={hoveredProject.image}
             alt={hoveredProject.title[lang]}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
@@ -136,6 +137,7 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
                   src={selectedProject.image}
                   alt={selectedProject.title[lang]}
                   className="max-h-[60vh] max-w-full object-contain rounded-xl"
+                  loading="lazy"
                 />
               </div>
 
@@ -168,6 +170,6 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
