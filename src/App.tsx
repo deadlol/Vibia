@@ -13,7 +13,7 @@ import { useDarkMode } from './hooks/useDarkMode';
 
 export default function App() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('home');
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>('fa');
   const { theme, toggleTheme } = useDarkMode();
   const [isLoading, setIsLoading] = useState(true);
 
