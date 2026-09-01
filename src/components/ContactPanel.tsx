@@ -26,7 +26,8 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
   };
 
   return (
-    <div
+    <section
+      id="contact"
       className={`fixed bottom-0 left-0 w-full min-h-[13rem] md:min-h-[14rem] bg-white border-t border-gray-200 z-40 transition-transform duration-700 cubic-transition flex items-center px-6 md:px-16 overflow-hidden shadow-2xl ${
         activePanel === 'contact' ? 'translate-y-0' : 'translate-y-full'
       }`}
@@ -88,6 +89,6 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
