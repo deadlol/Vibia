@@ -14,8 +14,6 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
     if (!ctx) return;
 
     let animationFrameId: number;
-    let angleX = 0;
-    let angleY = 0;
 
     const resizeCanvas = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
@@ -27,29 +25,35 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    const size = Math.min(canvas.width, canvas.height) * 0.2;
-    const vertices = [
-      [0, -size * 1.2, 0], 
-      [0, size * 1.2, 0],  
-      [size, 0, 0],        
-      [0, 0, size],      
-      [-size, 0, 0],   
-      [0, 0, -size]       
-    ];
 
-    const edges = [
-      [0, 2], [0, 3], [0, 4], [0, 5],
-      [1, 2], [1, 3], [1, 4], [1, 5],
-      [2, 3], [3, 4], [4, 5], [5, 2]
-    ];
+    // Generate Fibonacci Sphere points
+    const numPoints = 120;
+    const points: { x: number; y: number; z: number }[] = [];
+    const goldenRatio = (1 + Math.sqrt(5)) / 2;
 
-    let mouseX = 0;
-    let mouseY = 0;
+    for (let i = 0; i < numPoints; i++) {
+      const t = i / (numPoints - 1);
+      const phi = Math.acos(1 - 2 * t);
+      const theta = 2 * Math.PI * i / goldenRatio;
+
+      points.push({
+        x: Math.cos(theta) * Math.sin(phi),
+        y: Math.sin(theta) * Math.sin(phi),
+        z: Math.cos(phi),
+      });
+    }
+
+    let targetAngleX = 0;
+    let targetAngleY = 0;
+    let currentAngleX = 0;
+    let currentAngleY = 0;
+    let time = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
-      mouseX = (e.clientX / innerWidth - 0.5) * 0.02;
-      mouseY = (e.clientY / innerHeight - 0.5) * 0.02;
+      // Map mouse to a reasonable rotation target
+      targetAngleY = ((e.clientX / innerWidth) - 0.5) * Math.PI;
+      targetAngleX = ((e.clientY / innerHeight) - 0.5) * Math.PI;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -57,42 +61,89 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      angleX += 0.005 + mouseY;
-      angleY += 0.007 + mouseX;
+      time += 0.002;
+      // Smooth interpolation towards mouse target
+      currentAngleX += (targetAngleX - currentAngleX) * 0.05;
+      currentAngleY += (targetAngleY - currentAngleY) * 0.05;
+
+      const rotX = currentAngleX + time;
+      const rotY = currentAngleY + time * 1.3;
 
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
+      const size = Math.min(canvas.width, canvas.height) * 0.35;
 
-      const projected = vertices.map(([x, y, z]) => {
-        let x1 = x * Math.cos(angleY) + z * Math.sin(angleY);
-        let z1 = -x * Math.sin(angleY) + z * Math.cos(angleY);
-        let y2 = y * Math.cos(angleX) - z1 * Math.sin(angleX);
-        let z2 = y * Math.sin(angleX) + z1 * Math.cos(angleX);
+      // Project points
+      const projected = points.map(p => {
+        // Rotate around Y
+        let x1 = p.x * Math.cos(rotY) - p.z * Math.sin(rotY);
+        let z1 = p.x * Math.sin(rotY) + p.z * Math.cos(rotY);
+        // Rotate around X
+        let y2 = p.y * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = p.y * Math.sin(rotX) + z1 * Math.cos(rotX);
 
-        const fov = 400;
-        const scale = fov / (fov + z2 + size * 2);
+        // Apply perspective
+        const fov = 3;
+        const scale = fov / (fov + z2);
+
         return {
-          x: cx + x1 * scale,
-          y: cy + y2 * scale,
+          x: x1 * scale,
+          y: y2 * scale,
+          z: z2,
+          origX: p.x,
+          origY: p.y,
+          origZ: p.z
         };
       });
 
-      // Use theme colors
       const isDark = document.documentElement.classList.contains('dark');
-      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)';
-      ctx.lineWidth = 2.0;
+      ctx.lineWidth = 1.0;
 
-      edges.forEach(([i, j]) => {
-        ctx.beginPath();
-        ctx.moveTo(projected[i].x, projected[i].y);
-        ctx.lineTo(projected[j].x, projected[j].y);
-        ctx.stroke();
-      });
+      // Draw lines between close points
+      const maxDistance = 0.45;
+      for (let i = 0; i < numPoints; i++) {
+        for (let j = i + 1; j < numPoints; j++) {
+          const p1 = projected[i];
+          const p2 = projected[j];
 
+          // Calculate distance using original 3D coordinates so connections don't pop in/out
+          const dist = Math.sqrt(
+            (p1.origX - p2.origX) ** 2 +
+            (p1.origY - p2.origY) ** 2 +
+            (p1.origZ - p2.origZ) ** 2
+          );
+
+          if (dist < maxDistance) {
+            const avgZ = (p1.z + p2.z) / 2;
+            // Map Z from [-1, 1] to a depth multiplier [0, 1]
+            const depth = Math.max(0, (avgZ + 1.2) / 2.4);
+            const distFactor = 1 - (dist / maxDistance);
+            const opacity = depth * distFactor * 0.4;
+
+            if (opacity > 0.01) {
+              ctx.beginPath();
+              ctx.moveTo(cx + p1.x * size, cy + p1.y * size);
+              ctx.lineTo(cx + p2.x * size, cy + p2.y * size);
+              ctx.strokeStyle = isDark
+                ? `rgba(255, 255, 255, ${opacity})`
+                : `rgba(0, 0, 0, ${opacity})`;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // Draw nodes
       projected.forEach((p) => {
+        const depth = Math.max(0, (p.z + 1.2) / 2.4);
+        const radius = 1 + depth * 2;
+        const opacity = depth * 0.8;
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 3.0, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)';
+        ctx.arc(cx + p.x * size, cy + p.y * size, radius, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(255, 255, 255, ${opacity})`
+          : `rgba(0, 0, 0, ${opacity})`;
         ctx.fill();
       });
 
@@ -106,12 +157,12 @@ export const GeometricShape: React.FC<GeometricShapeProps> = ({ theme = 'light' 
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [theme]); // re-run effect when theme changes to ensure drawing colors update immediately
+  }, [theme]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-0"
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-0"
     />
   );
 };
