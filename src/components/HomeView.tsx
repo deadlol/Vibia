@@ -8,13 +8,22 @@ interface HomeViewProps {
   activePanel: ActivePanel;
   setActivePanel: (panel: ActivePanel) => void;
   theme?: 'light' | 'dark';
+  onNavigateToPricing?: () => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ dict, activePanel, setActivePanel, theme = 'light' }) => {
+export const HomeView: React.FC<HomeViewProps> = ({
+  dict,
+  activePanel,
+  setActivePanel,
+  theme = 'light',
+  onNavigateToPricing,
+}) => {
   const variants = {
     active: { opacity: 1, scale: 1, filter: 'blur(0px)' },
     inactive: { opacity: 0.2, scale: 0.95, filter: 'blur(4px)' }
   };
+
+  const isFa = dict.homeSubtitle.includes('پلتفرم');
 
   return (
     <motion.section
@@ -48,6 +57,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ dict, activePanel, setActive
           >
             {dict.navAbout}
           </button>
+          {onNavigateToPricing && (
+            <button
+              onClick={onNavigateToPricing}
+              className="px-6 py-3 rounded-full border border-blue-600/50 text-blue-600 dark:border-blue-400/50 dark:text-blue-400 text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white transition-colors duration-300 cursor-pointer flex items-center gap-2"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+              <span>{isFa ? 'پلن‌های راهکار سالن زیبایی' : 'Salon Solutions & Pricing'}</span>
+            </button>
+          )}
         </div>
       </div>
     </motion.section>

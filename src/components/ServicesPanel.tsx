@@ -9,6 +9,7 @@ interface WorksPanelProps {
   lang: Lang;
   dict: ContentDictionary;
   services: Service[];
+  onNavigateToPricing?: () => void;
 }
 
 export const WorksPanel: React.FC<WorksPanelProps> = ({
@@ -17,6 +18,7 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
   lang,
   dict,
   services,
+  onNavigateToPricing,
 }) => {
   const isRtl = lang === 'fa';
   const [hoveredProject, setHoveredProject] = useState<Service>(services[0]);
@@ -71,11 +73,22 @@ export const WorksPanel: React.FC<WorksPanelProps> = ({
           } ${isRtl ? 'md:pl-24' : 'md:pr-24'}`}
       >
         <div className="max-w-md w-full my-auto mx-auto md:mx-0">
-          <div className="flex items-center gap-3 mb-8">
-            <span className="w-6 h-0.5 bg-black dark:bg-white" />
-            <h2 className="text-xs uppercase tracking-widest font-bold text-gray-500 dark:text-gray-400">
-              {dict.selectedProjects}
-            </h2>
+          <div className="flex items-center justify-between gap-3 mb-8">
+            <div className="flex items-center gap-3">
+              <span className="w-6 h-0.5 bg-black dark:bg-white" />
+              <h2 className="text-xs uppercase tracking-widest font-bold text-gray-500 dark:text-gray-400">
+                {dict.selectedProjects}
+              </h2>
+            </div>
+            {onNavigateToPricing && (
+              <button
+                onClick={onNavigateToPricing}
+                className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:opacity-75 transition-opacity flex items-center gap-1 cursor-pointer focus:outline-none"
+              >
+                <span>{isRtl ? 'پلن‌های سالن زیبایی' : 'Salon Plans'}</span>
+                {isRtl ? <ArrowLeft size={12} /> : <ArrowRight size={12} />}
+              </button>
+            )}
           </div>
 
           <div className="space-y-6 md:space-y-8">

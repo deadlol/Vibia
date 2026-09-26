@@ -8,10 +8,13 @@ import { WorksPanel } from './components/ServicesPanel';
 import { AboutPanel } from './components/AboutPanel';
 import { ContactPanel } from './components/ContactPanel';
 import { Preloader } from './components/Preloader';
+import { SalonPricingPage } from './components/SalonPricingPage';
 import { useSEO } from './hooks/useSEO';
 import { useDarkMode } from './hooks/useDarkMode';
+import { useRouter } from './hooks/useRouter';
 
 export default function App() {
+  const { route, navigateTo } = useRouter();
   const [activePanel, setActivePanel] = useState<ActivePanel>('home');
   const [lang, setLang] = useState<Lang>('fa');
   const { theme, toggleTheme } = useDarkMode();
@@ -19,6 +22,11 @@ export default function App() {
 
   // Preload images to ensure instantaneous hovering
   useEffect(() => {
+    if (route === 'pricing') {
+      setIsLoading(false);
+      return;
+    }
+
     const loadImages = async () => {
       const imagePromises = services.map((service) => {
         return new Promise((resolve) => {
@@ -30,19 +38,31 @@ export default function App() {
       });
 
       // Artificial minimum delay so the beautiful loader can be appreciated
-      const minDelay = new Promise((resolve) => setTimeout(resolve, 2500));
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 2000));
 
       await Promise.all([...imagePromises, minDelay]);
       setIsLoading(false);
     };
 
     loadImages();
-  }, []);
+  }, [route]);
 
   const dict = content[lang];
   const isRtl = lang === 'fa';
 
-  useSEO(lang);
+  useSEO(lang, route);
+
+  if (route === 'pricing') {
+    return (
+      <SalonPricingPage
+        lang={lang}
+        setLang={setLang}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onNavigateHome={() => navigateTo('home')}
+      />
+    );
+  }
 
   return (
     <>
@@ -53,47 +73,54 @@ export default function App() {
           isRtl ? 'font-vazirmatn' : 'font-montserrat'
         }`}
       >
-      <Header
-        activePanel={activePanel}
-        setActivePanel={setActivePanel}
-        lang={lang}
-        setLang={setLang}
-        closeText={dict.close}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
+        <Header
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          lang={lang}
+          setLang={setLang}
+          closeText={dict.close}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
 
-      <EdgeNav
-        activePanel={activePanel}
-        setActivePanel={setActivePanel}
-        lang={lang}
-        dict={dict}
-      />
+        <EdgeNav
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          lang={lang}
+          dict={dict}
+        />
 
-      <HomeView dict={dict} activePanel={activePanel} setActivePanel={setActivePanel} theme={theme} />
+        <HomeView
+          dict={dict}
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          theme={theme}
+          onNavigateToPricing={() => navigateTo('pricing')}
+        />
 
-      <WorksPanel
-        activePanel={activePanel}
-        setActivePanel={setActivePanel}
-        lang={lang}
-        dict={dict}
-        services={services}
-      />
+        <WorksPanel
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          lang={lang}
+          dict={dict}
+          services={services}
+          onNavigateToPricing={() => navigateTo('pricing')}
+        />
 
-      <AboutPanel
-        activePanel={activePanel}
-        setActivePanel={setActivePanel}
-        lang={lang}
-        dict={dict}
-      />
+        <AboutPanel
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          lang={lang}
+          dict={dict}
+        />
 
-      <ContactPanel
-        activePanel={activePanel}
-        setActivePanel={setActivePanel}
-        lang={lang}
-        dict={dict}
-      />
-    </main>
+        <ContactPanel
+          activePanel={activePanel}
+          setActivePanel={setActivePanel}
+          lang={lang}
+          dict={dict}
+        />
+      </main>
     </>
   );
 }
