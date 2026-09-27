@@ -238,7 +238,6 @@ export const SalonPricingPage: React.FC<SalonPricingPageProps> = ({
         <section className="text-center max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20">
           {/* Subtle Editorial Kicker */}
           <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 text-[11px] sm:text-xs tracking-widest uppercase font-mono text-black/60 dark:text-white/60">
-            <span>01</span>
             <span aria-hidden="true">·</span>
             <span>{t.heroKicker}</span>
           </div>

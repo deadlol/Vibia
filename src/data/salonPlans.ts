@@ -129,14 +129,14 @@ export const salonPlans: SalonPlan[] = [
       en: 'Ideal for boutique or single-location salons launching their online booking.'
     },
     setupPrice: {
-      irr: 15000000,
-      formattedFa: '۱۵,۰۰۰,۰۰۰',
-      formattedEn: '15,000,000'
+      irr: 45000000,
+      formattedFa: '۴۵,۰۰۰,۰۰۰',
+      formattedEn: '45,000,000'
     },
     monthlyPrice: {
-      irr: 1500000,
-      formattedFa: '۱,۵۰۰,۰۰۰',
-      formattedEn: '1,500,000'
+      irr: 5000000,
+      formattedFa: '۵,۰۰۰,۰۰۰',
+      formattedEn: '5,000,000'
     },
     highlights: [
       { fa: 'وبسایت اختصاصی با ویترین خدمات و گالری', en: 'Custom website with showcase gallery' },
@@ -233,14 +233,14 @@ export const salonPlans: SalonPlan[] = [
       en: 'Busy salons with multiple stylists wanting to eliminate no-shows and reception chaos.'
     },
     setupPrice: {
-      irr: 35000000,
-      formattedFa: '۳۵,۰۰۰,۰۰۰',
-      formattedEn: '35,000,000'
+      irr: 60000000,
+      formattedFa: '۶۰,۰۰۰,۰۰۰',
+      formattedEn: '60,000,000'
     },
     monthlyPrice: {
-      irr: 3200000,
-      formattedFa: '۳,۲۰۰,۰۰۰',
-      formattedEn: '3,200,000'
+      irr: 8000000,
+      formattedFa: '۸,۰۰۰,۰۰۰',
+      formattedEn: '8,000,000'
     },
     highlights: [
       { fa: 'تمام قابلیت‌های پلن ۱ (استارتر)', en: 'All features from Plan 1 (Starter)' },
@@ -350,14 +350,14 @@ export const salonPlans: SalonPlan[] = [
       en: 'Chains, luxury clinics, and premier beauty brands requiring multi-branch control & ERP.'
     },
     setupPrice: {
-      irr: 75000000,
-      formattedFa: '۷۵,۰۰۰,۰۰۰',
-      formattedEn: '75,000,000'
+      irr: 85000000,
+      formattedFa: '۸۵,۰۰۰,۰۰۰',
+      formattedEn: '85,000,000'
     },
     monthlyPrice: {
-      irr: 6500000,
-      formattedFa: '۶,۵۰۰,۰۰۰',
-      formattedEn: '6,500,000'
+      irr: 10000000,
+      formattedFa: '۱۰,۰۰۰,۰۰۰',
+      formattedEn: '10,000,000'
     },
     highlights: [
       { fa: 'تمام قابلیت‌های پلن‌های قبلی (استارتر و حرفه‌ای)', en: 'All features from Starter & Professional' },
