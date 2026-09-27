@@ -34,7 +34,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
       <div className={`w-full lg:w-1/2 min-h-[50vh] lg:min-h-full flex items-center justify-center p-8 pt-12 lg:p-16 ${isRtl ? 'lg:pr-24' : 'lg:pl-24'} bg-gray-200/50 dark:bg-zinc-900/50 relative overflow-hidden`}>
         <div className="relative w-full max-w-md h-full max-h-[85%] rounded-2xl overflow-hidden shadow-2xl group">
           <img
-            src="https://6a8af91b97833836f656e772.imgix.net/sandbox/Gemini_Generated_Image_zdh7jmzdh7jmzdh7.jpg"
+            src="https://iili.io/n5Q37JS.jpg"
             alt="VIBIA logo"
             loading="lazy"
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
