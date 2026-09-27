@@ -594,17 +594,17 @@ export const SalonPricingPage: React.FC<SalonPricingPageProps> = ({
                 </div>
                 <input
                   type="range"
-                  min="5"
-                  max="80"
+                  min="50"
+                  max="200"
                   step="1"
                   value={dailyClients}
                   onChange={(e) => setDailyClients(Number(e.target.value))}
                   className="w-full accent-black dark:accent-white cursor-pointer h-2 bg-black/10 dark:bg-white/10"
                 />
                 <div className="flex justify-between text-[10px] text-black/40 dark:text-white/40 mt-1 font-mono">
-                  <span>5</span>
-                  <span>40</span>
-                  <span>80+</span>
+                  <span>50</span>
+                  <span>125</span>
+                  <span>200+</span>
                 </div>
               </div>
 
