@@ -29,7 +29,6 @@ export interface ContentDictionary {
   prj1: string;
   prj2: string;
   prj3: string;
-  prj4: string;
   projectsHeader: string;
   getInTouch: string;
   phoneLabel: string;

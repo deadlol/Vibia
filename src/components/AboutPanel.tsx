@@ -66,7 +66,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
             </h3>
             <div className="grid grid-cols-2 gap-3 text-xs font-bold text-gray-800 dark:text-gray-200">
               <a
-                href="https://armin-amanii.netlify.app/"
+                href="https://armin-amani.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center justify-between p-2.5 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
@@ -78,7 +78,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
                 <ExternalLink size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </a>
               <a
-                href="https://gamelandar.netlify.app/"
+                href="https://lol-app-ochre.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center justify-between p-2.5 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
@@ -90,7 +90,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
                 <ExternalLink size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </a>
               <a
-                href="https://nexus-crypto-mp.netlify.app/"
+                href="https://nexus-crypto-three.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center justify-between p-2.5 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
@@ -101,18 +101,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({
                 </div>
                 <ExternalLink size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </a>
-              <a
-                href="https://xora-main.netlify.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between p-2.5 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Code size={14} className="text-blue-600 dark:text-blue-500 group-hover:scale-110 transition-transform" />
-                  <span>{dict.prj4}</span>
-                </div>
-                <ExternalLink size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-              </a>
+              
 
             </div>
           </div>
