@@ -10,17 +10,7 @@
     "postbuild": "react-snap",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
-  },
-  "reactSnap": {
-    "source": "dist",
-    "include": [
-      "/",
-      "/pricing"
-    ],
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ]
+  
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
